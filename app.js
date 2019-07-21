@@ -1,5 +1,12 @@
-const express = require('express')
-const app = express()
-const port = 3000
+var express = require('express');
+var app = express();
+var db = require('./db');
+var passportConfig = require('./auth/PassportConfig')
+var auth = require('./auth/AuthController');
+const passport = require("passport");
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.use(passport.initialize());
+passportConfig(passport);
+app.use('/auth', auth);
+
+module.exports = app;
