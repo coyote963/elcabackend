@@ -29,6 +29,7 @@ router.post("/register", function (req, res) {
     
     if (!isValid) {
         return res.status(400).json(errors);
+        //res.status(400).send(errors);
     }
     
     User.findOne({ email : req.body.email }).then(user => {
@@ -40,7 +41,6 @@ router.post("/register", function (req, res) {
                 first_name : req.body.first_name,
                 last_name : req.body.last_name,
                 password : req.body.password1,
-                gender : req.body.gender,
                 email : req.body.email
             })
             console.log(newUser);
@@ -48,14 +48,12 @@ router.post("/register", function (req, res) {
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) {
-                        console.log(err)
                         res.status(400).send(err);
                     }
                     newUser.password = hash;
                     newUser
                         .save()
                         .then(user => res.json(user))
-                        .catch(err => console.log(err));
                     
                 })
             })
@@ -76,7 +74,7 @@ router.post("/login", function (req, res)  {
     User.findOne({ email })
     .then(user => {
         if (!user) {
-            return res.status(404).json({ emailnotfound: "Email not found"});
+            return res.status(404).json({ email: "Email not found"});
         }
         bcrypt.compare(password, user.password).then(isMatch => {
             if (isMatch) {
@@ -97,7 +95,7 @@ router.post("/login", function (req, res)  {
                     }
                 )
             } else {
-                res.status(400).json({ passwordIncorrect : "Password Incorrect" });
+                res.status(400).json({ password : "Password Incorrect" });
             }
         })
     })
