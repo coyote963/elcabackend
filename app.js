@@ -11,4 +11,14 @@ passportConfig(passport);
 app.use(cors());
 app.use("/auth", auth);
 
+// @route GET getUser
+// @desc Get the currently logged in user
+// @access Private
+app.get("/getUser", passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log(req.headers);
+    console.log(req.user);
+    res.send(req.user);
+});
+
+
 module.exports = app;

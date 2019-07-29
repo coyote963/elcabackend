@@ -54,7 +54,6 @@ router.post("/register", function (req, res) {
                     newUser
                         .save()
                         .then(user => res.json(user))
-                    
                 })
             })
         }
@@ -79,7 +78,7 @@ router.post("/login", function (req, res)  {
         bcrypt.compare(password, user.password).then(isMatch => {
             if (isMatch) {
                 const payload = {
-                    id: user._id,
+                    _id: user._id,
                     name: user.email
                 };
                 jwt.sign(payload,
@@ -89,6 +88,7 @@ router.post("/login", function (req, res)  {
                     },
                     (err, token) => {
                         res.json({
+                            user: user,
                             success: true,
                             token: "Bearer " + token
                         });
@@ -100,5 +100,6 @@ router.post("/login", function (req, res)  {
         })
     })
 })
+
 
 module.exports = router;
