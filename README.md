@@ -16,7 +16,9 @@ This backend uses MongoDB for the database, so install that as well
 
 ### Configuration
 
-Before you can use run the application, you need to add a config file
+Before you can use run the application, you need to add a config file in the project root folder
+
+`touch .env`
 
 Here is an example .env that I use on development server
 
