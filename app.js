@@ -20,5 +20,5 @@ app.get("/getUser", passport.authenticate('jwt', { session: false }), (req, res)
     res.send(req.user);
 });
 
-
+app.get('/', (req, res) => res.send('Welcome to ELCA Church backend'))
 module.exports = app;
