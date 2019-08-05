@@ -6,11 +6,13 @@ var auth = require('./auth/AuthController');
 const passport = require("passport");
 var cors = require('cors');
 var bible = require('./bible/BibleController');
+var hymn = require('./hymn/HymnController')
 app.use(passport.initialize());
 passportConfig(passport);
 app.use(cors());
 app.use("/auth", auth);
 app.use("/bible", bible)
+app.use("/hymn", hymn)
 // @route GET getUser
 // @desc Get the currently logged in user
 // @access Private
