@@ -17,6 +17,8 @@ router.get('/', function(req, res) {
 });
 
 // @route GET /hymn/search/:searchTerm
+// @desc do a full  text search for searchTerm, returning a sorted array (based on matchness) top 50 hymns that match the query
+// @access PUBLIC
 router.get('/search/:searchTerm', function (req, res) {
     console.log(req.params.searchTerm)
     Hymn.find({$text : {$search : req.params.searchTerm}},
