@@ -25,9 +25,13 @@ router.get('/', function(req, res) {
 // @desc put a new suggestion in the database
 // @access PRIVATE
 router.post('/', function(req, res) {
+    console.log(req.body)
     VerseSuggestion.create({
-        verse: req.body.verse,
-        user: req.body.user_id,
+        bibleId : req.body.bibleId,
+        bookId: req.body.bookId,
+        chapterId : req.body.chapterId,
+        verseId : req.body.verseId,
+        user: req.body.user,
         comment : req.body.comment
     }, function (err, suggestion) {
         if (err)  return  res.status(500).send(err)
