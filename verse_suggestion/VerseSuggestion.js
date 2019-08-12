@@ -7,6 +7,7 @@ const VerseSuggestion = new Schema({
     bookId : String,
     chapterId : String,
     verseId : String,
+    bibleAbbr : String,
     user : { type : Schema.Types.ObjectId, ref : 'User' },
     comment : String,
     dateCreated : {

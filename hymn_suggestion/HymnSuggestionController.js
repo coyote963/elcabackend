@@ -28,12 +28,8 @@ router.get('/', function(req, res) {
 // @route GET 
 // @route POST hymnsuggestion/
 // @desc put a new suggestion in the database
-// @access PRIVATE
+// @access PRIVATE, ADMIN
 router.post('/', function(req, res) {
-    console.log("headers")
-    console.log(req.headers)
-    console.log("body")
-    console.log(req.body)
     HymnSuggestion.create({
         hymn: req.body.hymn,
         user: req.body.user,
@@ -41,6 +37,20 @@ router.post('/', function(req, res) {
     }, function (err, suggestion) {
         if (err)  return  res.status(500).send(err)
         res.status(200).send(suggestion)
+    })
+})
+
+
+// @route GET hymnsuggestion/:userId
+// @desc Get all the verse suggestions from the user, User Id
+// @access PRIVATE, ADMIN
+router.get('/:userId', function (req, res) {
+    HymnSuggestion.find({user : req.params.userId})
+    .sort({dateCreated : -1 })
+    .populate('hymn')
+    .exec(function (err, suggestions) {
+        if (err) return res.status(500).send(err);
+        res.status(200).send(suggestions)
     })
 })
 

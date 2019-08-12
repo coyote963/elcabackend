@@ -18,6 +18,17 @@ router.get('/', function(req, res) {
     })
 })
 
+// @route GET versesuggestion/:userId
+// @desc Get all the verse suggestions from the user, User Id
+// @access PRIVATE, ADMIN
+router.get('/:userId', function (req, res) {
+    VerseSuggestion.find({ user : req.params.userId })
+    .sort({dateCreated : -1 })
+    .exec(function (err, suggestions) {
+        if (err) return res.status(500).send(err);
+        res.status(200).send(suggestions)
+    })
+})
 
 
 
@@ -27,6 +38,7 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
     console.log(req.body)
     VerseSuggestion.create({
+        bibleAbbr : req.body.bibleAbbr,
         bibleId : req.body.bibleId,
         bookId: req.body.bookId,
         chapterId : req.body.chapterId,
