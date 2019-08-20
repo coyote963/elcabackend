@@ -7,7 +7,7 @@ router.use(bodyParser.json());
 
 var HymnSuggestion = require('./HymnSuggestion')
 
-// @route GET hymnsuggestion/
+// @route GET hymnsuggest/
 // @desc Get all the hymn suggestions, sorted by time
 // @access PRIVATE
 router.get('/', function(req, res) {
@@ -26,9 +26,9 @@ router.get('/', function(req, res) {
 
 
 // @route GET 
-// @route POST hymnsuggestion/
+// @route POST hymnsuggest/
 // @desc put a new suggestion in the database
-// @access PRIVATE, ADMIN
+// @access USER
 router.post('/', function(req, res) {
     HymnSuggestion.create({
         hymn: req.body.hymn,
@@ -41,7 +41,7 @@ router.post('/', function(req, res) {
 })
 
 
-// @route GET hymnsuggestion/:userId
+// @route GET hymnsuggest/:userId
 // @desc Get all the verse suggestions from the user, User Id
 // @access PRIVATE, ADMIN
 router.get('/:userId', function (req, res) {
