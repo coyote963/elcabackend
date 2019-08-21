@@ -1,7 +1,9 @@
 var passport = require('passport')
 
 var authenticationWhiteList = [
-	'GET /hymn'
+	'GET /hymn',
+	'POST /hymnsuggest',
+	'POST /versesuggest',
 ]
 
 function Authenticate (request, response, next) {

@@ -4,13 +4,14 @@ const router = express.Router();
 var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
+var passport = require('passport')
 
 var Prayer = require('./Prayer')
 
 // @route GET prayer/
 // @desc Get all the prayers, sorted by time
 // @access ADMIN
-router.get('/', function(req, res) {
+router.get('/', passport.authenticate('jwt', { session: false }), function(req, res) {
     Prayer.find()
     .sort({dateCreated : -1})
     .populate('user')
@@ -25,7 +26,7 @@ router.get('/', function(req, res) {
 // @route POST prayer/
 // @desc Post a new prayer
 // @access USER
-router.post('/', function(req, res) {
+router.post('/', passport.authenticate('jwt', { session: false }), function(req, res) {
     Prayer.create({
         comment : req.body.comment,
         user : req.body.user,
@@ -38,7 +39,10 @@ router.post('/', function(req, res) {
 // @route GET prayer/:userId
 // @desc Get prayers from that user and
 // @access ADMIN, PRIVATE
-router.get('/:userId', function(req, res) {
+router.get('/:userId', passport.authenticate('jwt', { session: false }), function(req, res) {
+    if (req.user._id != req.params.userId) {
+        return res.sendStatus(403);
+    }
     Prayer.find({user : req.params.userId})
     .sort({ dateCreated : -1 })
     .exec(function (err, prayers) {

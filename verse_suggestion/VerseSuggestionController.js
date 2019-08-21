@@ -4,11 +4,12 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 var VerseSuggestion = require('./VerseSuggestion')
-
+var {allowOnly} = require('../allowOnly')
+var passport = require('passport')
 // @route GET versesuggestion/
 // @desc Get all the verse suggestions, sorted by time
 // @access PRIVATE
-router.get('/', function(req, res) {
+router.get('/', passport.authenticate('jwt', { session: false }), allowOnly('admin', function(req, res) {
     VerseSuggestion.find()
     .sort({ dateCreated : -1 })
     .populate('user')
@@ -16,12 +17,15 @@ router.get('/', function(req, res) {
         if (err) return res.status(500).send(err);
         res.status(200).send(suggestions)
     })
-})
+}))
 
 // @route GET versesuggestion/:userId
 // @desc Get all the verse suggestions from the user, User Id
 // @access PRIVATE, ADMIN
-router.get('/:userId', function (req, res) {
+router.get('/:userId', passport.authenticate('jwt', { session: false }), function (req, res) {
+    if (req.user._id != req.params.userId) {
+        return res.sendStatus(403);
+    }
     VerseSuggestion.find({ user : req.params.userId })
     .sort({dateCreated : -1 })
     .exec(function (err, suggestions) {
@@ -35,7 +39,7 @@ router.get('/:userId', function (req, res) {
 // @route POST versesuggestion/
 // @desc put a new suggestion in the database
 // @access PRIVATE
-router.post('/', function(req, res) {
+router.post('/', passport.authenticate('jwt', { session: false }), function(req, res) {
     console.log(req.body)
     VerseSuggestion.create({
         bibleAbbr : req.body.bibleAbbr,

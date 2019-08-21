@@ -3,10 +3,11 @@ const express = require('express');
 const router  = express.Router();
 const axios = require('axios')
 const BIBLE_API_KEY = process.env.BIBLE_API_KEY
+var passport = require('passport')
 // @route GET bible/
 // @desc Get the bibles
 // @access Public
-router.get('/', function(req, res) {
+router.get('/', passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
     axios.get("https://api.scripture.api.bible/v1/bibles", {headers : headers })
     .then(api_response => {
@@ -33,7 +34,7 @@ router.get('/', function(req, res) {
 // @route GET bible/
 // @desc Get the books in this bible
 // @access Public
-router.get('/:bible', function(req, res) {
+router.get('/:bible', passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
     //console.log("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books")
     axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books", {headers : headers })
@@ -50,7 +51,7 @@ router.get('/:bible', function(req, res) {
 // @route GET bible/
 // @desc Get the chapters in this book
 // @access Public
-router.get('/:bible/:book', function(req, res) {
+router.get('/:bible/:book', passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
     //console.log("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books")
     axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books/" + req.params.book + "/chapters", {headers : headers })
@@ -66,7 +67,7 @@ router.get('/:bible/:book', function(req, res) {
 // @route GET bible/verse/:bible/:chapter
 // @desc Get the list of verses in this book
 // @access Public
-router.get('/verse/:bible/:chapter', function(req, res) {
+router.get('/verse/:bible/:chapter', passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
     //console.log("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books")
     axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/chapters/" + req.params.chapter + "/verses", {headers : headers })
@@ -83,7 +84,7 @@ router.get('/verse/:bible/:chapter', function(req, res) {
 // @route GET bible/verse/:bible/:chapter
 // @desc Get the list of verses in this book
 // @access Public
-router.get('/versecontent/:bible/:verseid', function(req, res) {
+router.get('/versecontent/:bible/:verseid',passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
     //console.log("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books")
     axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/verses/" + req.params.verseid , {headers : headers })
@@ -100,7 +101,7 @@ router.get('/versecontent/:bible/:verseid', function(req, res) {
 // @route GET bible/verse/:bible/:chapter
 // @desc Get the list of verses in this book
 // @access Public
-router.get('/chaptercontent/:bible/:chapterid', function(req, res) {
+router.get('/chaptercontent/:bible/:chapterid', passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
     //console.log("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books")
     axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/chapters/" + req.params.chapterid , {headers : headers })

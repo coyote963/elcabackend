@@ -8,18 +8,19 @@ var validateRegisterInput = require('./validateregister');
 var validateLoginInput = require('./validatelogin');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
+var passport = require('passport')
 var User = require('./User')
-
+var { allowOnly } = require('../allowOnly')
 // @route GET auth/
 // @desc Get all the users
 // @access Public
-router.get('/', function(req, res) {
+router.get('/', passport.authenticate('jwt', { session: false }), allowOnly('superAdmin', function(req, res) {
     User.find({}, ['_id', 'first_name', 'last_name', 'email', 'gender'],
     function (err, user) {
         if (err) return res.status(500).send("error getting the users");
         res.status(200).send(user);
     });
-});
+}));
 
 // @route POST auth/register
 // @desc Register a new user
