@@ -4,6 +4,13 @@ const router  = express.Router();
 const axios = require('axios')
 const BIBLE_API_KEY = process.env.BIBLE_API_KEY
 var passport = require('passport')
+
+var bodyParser = require('body-parser');
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
+
+
 // @route GET bible/
 // @desc Get the bibles
 // @access Public
@@ -31,11 +38,14 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     })
 });
 
+
+
 // @route GET bible/
 // @desc Get the books in this bible
 // @access Public
 router.get('/:bible', passport.authenticate('jwt', { session: false }), function(req, res) {
     var headers = {"api-key" : BIBLE_API_KEY}
+    console.log("hitting here")
     //console.log("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books")
     axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/books", {headers : headers })
     .then(api_response => {
@@ -115,6 +125,24 @@ router.get('/chaptercontent/:bible/:chapterid', passport.authenticate('jwt', { s
     })
 });
 
+// @route GET bible/search/:bibleId/
+// @desc Search a bible for the query params
+// @access Public
+router.get('/search/:bible/:query', passport.authenticate('jwt', {session : false}), function (req, res) {
+    
+    let params =  {query : req.params.query}
+    
+    let headers = {"api-key" : BIBLE_API_KEY}
+    
+    
+    axios.get("https://api.scripture.api.bible/v1/bibles/" + req.params.bible + "/search", {params, headers})
+    .then(api_response => {
+        res.send(api_response.data.data.verses)
+    })
+    .catch(error => {
+        res.send(error)
+    })
+});
 
 // @route 
 module.exports = router;
