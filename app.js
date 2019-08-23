@@ -7,7 +7,6 @@ var auth = require('./auth/AuthController');
 var passport = require("passport");
 var cors = require('cors');
 var bible = require('./bible/BibleController');
-var biblesearch = require('./bible/BibleSearch')
 var hymn = require('./hymn/HymnController');
 var prayer = require('./prayer/PrayerController');
 let authenticateroute = require('./AuthMiddleware');
