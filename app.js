@@ -12,7 +12,7 @@ var prayer = require('./prayer/PrayerController');
 let authenticateroute = require('./AuthMiddleware');
 var versesuggestion = require('./verse_suggestion/VerseSuggestionController');
 var hymnsuggestion = require('./hymn_suggestion/HymnSuggestionController');
-
+var chat = require('./chat/ChatController')
 app.use(passport.initialize());
 passportConfig(passport);
 app.use(cors());
@@ -23,6 +23,7 @@ app.use("/hymn", hymn);
 app.use("/versesuggest", authenticateroute, versesuggestion);
 app.use("/hymnsuggest", authenticateroute, hymnsuggestion);
 app.use("/prayer", authenticateroute, prayer);
+app.use('/chat', chat)
 // @route GET getUser
 // @desc Get the currently logged in user
 // @access Private
