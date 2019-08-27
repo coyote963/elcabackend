@@ -42,7 +42,10 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
 // @route GET hymnsuggest/:userId
 // @desc Get all the verse suggestions from the user, User Id
 // @access PRIVATE, ADMIN
-router.get('/:userId', passport.authenticate('jwt', { session: false }), allowOnly('admin', function (req, res) {
+router.get('/:userId', passport.authenticate('jwt', { session: false }), function(req, res) {
+    if (String(req.user._id) !== req.params.userId) {
+        res.status(403)
+    }
     HymnSuggestion.find({user : req.params.userId})
     .sort({dateCreated : -1 })
     .populate('hymn')
@@ -50,6 +53,6 @@ router.get('/:userId', passport.authenticate('jwt', { session: false }), allowOn
         if (err) return res.status(500).send(err);
         res.status(200).send(suggestions)
     })
-}))
+})
 
 module.exports = router;

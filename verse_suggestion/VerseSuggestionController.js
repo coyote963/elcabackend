@@ -23,8 +23,8 @@ router.get('/', passport.authenticate('jwt', { session: false }), allowOnly('adm
 // @desc Get all the verse suggestions from the user, User Id
 // @access PRIVATE, ADMIN
 router.get('/:userId', passport.authenticate('jwt', { session: false }), function (req, res) {
-    if (req.user._id != req.params.userId) {
-        return res.sendStatus(403);
+    if (String(req.user._id) !== req.params.userId) {
+        res.status(403)
     }
     VerseSuggestion.find({ user : req.params.userId })
     .sort({dateCreated : -1 })

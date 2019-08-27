@@ -40,8 +40,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
 // @desc Get prayers from that user and
 // @access ADMIN, PRIVATE
 router.get('/:userId', passport.authenticate('jwt', { session: false }), function(req, res) {
-    if (req.user._id != req.params.userId) {
-        return res.sendStatus(403);
+    if (String(req.user._id) !== req.params.userId) {
+        res.status(403)
     }
     Prayer.find({user : req.params.userId})
     .sort({ dateCreated : -1 })

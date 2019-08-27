@@ -29,12 +29,13 @@ router.post("/register", function (req, res) {
     const { errors, isValid } = validateRegisterInput(req.body);
     
     if (!isValid) {
+        console.log(errors)
         return res.status(400).json(errors);
-        //res.status(400).send(errors);
     }
     
     User.findOne({ email : req.body.email }).then(user => {
         if (user) {
+            console.log("email error")
             return res.status(400).json({ email : "Email already exists" });
         } else {
             
@@ -49,6 +50,7 @@ router.post("/register", function (req, res) {
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) {
+                        console.log("hash error")
                         res.status(400).send(err);
                     }
                     newUser.password = hash;
